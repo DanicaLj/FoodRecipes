@@ -34,7 +34,7 @@ ingredient_recipe = db['ingredient_recipe']
 @app.route('/index')
 def index():
 
-	return redirect(url_for('all_recipe'))
+	return redirect(url_for('login'))
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
@@ -165,8 +165,8 @@ def my_recipes():
 		}
 		my_recipes.append(data)	
 		ingredientNames = []	
-
-	return render_template('all-recipes.html', fullRecipe = my_recipes)
+	topIngredients = top_ingredients()
+	return render_template('all-recipes.html', fullRecipe = my_recipes, topIngredients = topIngredients)
 
 def most_frequent(List): 
     counter = 0
