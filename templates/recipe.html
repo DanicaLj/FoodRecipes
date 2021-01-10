@@ -1,0 +1,16 @@
+<html>
+    <body>
+        Rate {{selectedRecipe["name"]}}
+        <form action = '/rate-recipe' method = 'POST' enctype = 'multipart/form-data'>
+            <input type = 'text' value = '{{selectedRecipe["_id"]}}' name = 'recipe_id' hidden />
+            <select name="rate">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <input class="button1" type = 'submit' value = 'Rate!' />
+        </form>
+    </body>
+</html>

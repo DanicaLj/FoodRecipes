@@ -1,0 +1,98 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	</head>
+    <body>
+        <p>Recipes</p>
+        <input type="text" id="search" placeholder="Search...">
+        <table border="1" class="table" id="tableRecipe">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Ingredients</th>
+                    <th>Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for recipe in fullRecipe %}
+                    <tr data-ingredient-count="{{recipe['ingredient_count']}}">
+                        <td><a  href = "/recipe/{{recipe['_id']}}">{{recipe['name']}}</a></td>
+                        <td>{{recipe['description']}}</td>
+                        <td>
+                        {%for i in recipe['ingredient_name']%}
+                        <li>{{i}}</li>
+                        {%endfor%}
+                        </td>
+                        <td>{{recipe['rate']}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form action = '/recipe-create' method = 'GET' enctype = 'multipart/form-data'>
+            <button>Create recipe</button>
+        </form>
+        <b>Filter recipes with:</b>
+        <button class="filter-max">Max Ingredients</button>
+        <button class="filter-min">Min Ingredients</button>
+        <button class="filter-reset">Reset Filter</button>
+        <p>Top Ingredients</p>
+        <ul>
+            {%for topIngredient in topIngredients%}
+                <li>{{topIngredient}}</li>
+            {%endfor%}
+        </ul>
+    </body>
+    <script>
+    $("#search").on("keyup", function() {
+        search();
+    });
+    function search(){
+        var value = $("#search").val().toLowerCase();
+        $("#tableRecipe tbody tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    };
+    $('.filter-max').on('click', function(){
+        var avgCount = getAverageIngredietnCount();
+        $("#tableRecipe tbody tr").each(function(){
+            var count = parseInt($(this).attr('data-ingredient-count'));
+            console.log(count);
+            if(!(count > avgCount)){
+                $(this).css('display', 'none');
+            }
+            else{
+                $(this).css('display', 'table-row');
+            }
+        });
+    });
+    $('.filter-min').on('click', function(){
+        var avgCount = getAverageIngredietnCount();
+        $("#tableRecipe tbody tr").each(function(){
+            var count = parseInt($(this).attr('data-ingredient-count'));
+            if(!(count <= avgCount)){
+                $(this).css('display', 'none');
+            }
+            else{
+                $(this).css('display', 'table-row');
+            }
+        });
+    });
+    $('.filter-reset').on('click', function(){
+        
+        $("#tableRecipe tbody tr").each(function(){
+            $(this).css('display', 'table-row');
+        });
+    });
+    
+    function getAverageIngredietnCount(){
+        var count = $("#tableRecipe tbody tr").length;
+        var i = 0;
+        $("#tableRecipe tbody tr").each(function(){
+            value = parseInt($(this).attr('data-ingredient-count'));
+            i = i + value;
+        });
+        return i/count;
+    }
+    </script>
+</html>

@@ -1,0 +1,16 @@
+<html>
+    <body>
+        <p>Add new recipe</p>
+		<form action = '/recipe-create' method = 'POST' enctype = 'multipart/form-data'> 
+            Name: <input type = 'text' name = 'name' /> </br>
+            Ingredients (select meny)
+			<select name="ingredients"  multiple>
+                {%for ingredient in ingredients%}
+                <option value="{{ingredient['_id']}}">{{ingredient['name']}}</option>
+                {%endfor%}
+            </select> </br>
+            Description: <input type = 'text' name = 'description' /> </br>
+			<input type = 'submit' value = 'Add recipe!' /> </br>
+		</form>
+    </body>
+</html>
